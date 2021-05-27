@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -69,8 +70,8 @@ class FirstFragment : Fragment() {
         generateButton?.setOnClickListener {
             hideKeyboard()
             when {
-                min <= 0 -> snackMessage("min empty")
-                max <= 0 -> snackMessage("max empty")
+                min <= -1 -> snackMessage("min empty")
+                max <= -1 -> snackMessage("max empty")
                 min > max -> snackMessage("min > max")
                 else -> mainActivity().openSecondFragment(min, max, parentFragmentManager)
             }
