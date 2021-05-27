@@ -28,8 +28,8 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        previousResult?.text =
-            "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
+        previousResult?.text = resources.getString(R.string.previous_result_text, arguments?.getInt(PREVIOUS_RESULT_KEY))
+
         var min: Int? = null
         var max: Int? = null
 
@@ -96,12 +96,8 @@ class FirstFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(previousResult: Int): FirstFragment {
-            val fragment = FirstFragment()
-            val args = Bundle()
-            args.putInt(PREVIOUS_RESULT_KEY, previousResult)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(previousResult: Int) = FirstFragment().apply {
+            arguments = bundleOf(PREVIOUS_RESULT_KEY to previousResult)
         }
 
         const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
 class SecondFragment : Fragment() {
@@ -43,13 +44,8 @@ class SecondFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(min: Int, max: Int): SecondFragment {
-            val fragment = SecondFragment()
-            val args = Bundle()
-            args.putInt(MIN_VALUE_KEY, min)
-            args.putInt(MAX_VALUE_KEY, max)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(min: Int, max: Int) = SecondFragment().apply {
+            arguments = bundleOf(MIN_VALUE_KEY to min, MAX_VALUE_KEY to max)
         }
 
         @JvmStatic

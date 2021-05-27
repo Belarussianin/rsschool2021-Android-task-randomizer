@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface {
     private static String current_fragment;
-    SharedPreferences sPref;
+    private SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +38,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         transaction.commit();
     }
 
-    @Override
-    public void putIntPreference(@NotNull String key, int value) {
-        sPref.edit().putInt(key, value).apply();
-    }
-
-    @Override
-    public int getIntPreference(@NotNull String key) {
-        return sPref.getInt(key, 0);
-    }
-
+/*TODO
+*    @Override
+*    public void putIntPreference(@NotNull String key, int value) {
+*        sPref.edit().putInt(key, value).apply();
+*    }
+*TODO
+*    @Override
+*    public int getIntPreference(@NotNull String key) {
+*        return sPref.getInt(key, 0);
+*    }
+*/
     @Override
     public void onBackPressed() {
         switch (current_fragment) {
