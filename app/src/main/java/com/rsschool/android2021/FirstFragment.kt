@@ -9,8 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.rsschool.android2021.SecondFragment.Companion.newInstance
+import com.google.android.material.snackbar.Snackbar
 
 class FirstFragment : Fragment() {
 
@@ -29,29 +28,57 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
+        previousResult?.text =
+            "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
 
-        val result = arguments?.getInt(PREVIOUS_RESULT_KEY)
-        previousResult?.text = "Previous result: ${result.toString()}"
-
+        val mainActivity = MainActivity()
         var min = 0
+        var max = 0
+
         view.findViewById<EditText>(R.id.min_value).doAfterTextChanged {
-            view.findViewById<EditText>(R.id.min_value).text.toString().toIntOrNull()?.let {
-                min = it
+            val minView = view.findViewById<EditText>(R.id.min_value)
+            minView.text.toString().toLongOrNull()?.let {
+                when {
+                    it > Int.MAX_VALUE -> {
+                        hideKeyboard()
+                        snackMessage("min > Int.MAX_VALUE")
+                        minView.setText("")
+                    }
+                    else -> {
+                        min = it.toInt()
+                    }
+                }
             }
         }
-        var max = 0
         view.findViewById<EditText>(R.id.max_value).doAfterTextChanged {
-            view.findViewById<EditText>(R.id.max_value).text.toString().toIntOrNull()?.let {
-                max = it
+            val maxView = view.findViewById<EditText>(R.id.max_value)
+            maxView.text.toString().toLongOrNull()?.let {
+                when {
+                    it > Int.MAX_VALUE -> {
+                        hideKeyboard()
+                        snackMessage("max > Int.MAX_VALUE")
+                        maxView.setText("")
+                    }
+                    else -> {
+                        max = it.toInt()
+                    }
+                }
             }
         }
 
         generateButton?.setOnClickListener {
-            val secondFragment: Fragment = newInstance(min, max)
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.container, secondFragment)
-            transaction.commit()
+            hideKeyboard()
+            when {
+                min <= 0 -> snackMessage("min empty")
+                max <= 0 -> snackMessage("max empty")
+                min > max -> snackMessage("min > max")
+                else -> mainActivity.openSecondFragment(min, max, parentFragmentManager)
+            }
         }
+    }
+
+    private fun snackMessage(charSequence: CharSequence) = view?.let {
+        Snackbar.make(it, charSequence, Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {

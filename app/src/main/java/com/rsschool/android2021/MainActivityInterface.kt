@@ -1,0 +1,8 @@
+package com.rsschool.android2021
+
+import androidx.fragment.app.FragmentManager
+
+interface MainActivityInterface {
+    fun openFirstFragment(prevNum: Int, fragmentManager: FragmentManager)
+    fun openSecondFragment(max: Int, min: Int, fragmentManager: FragmentManager)
+}

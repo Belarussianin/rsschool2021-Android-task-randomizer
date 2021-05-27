@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
+
 class SecondFragment : Fragment() {
 
     private var backButton: Button? = null
@@ -28,17 +29,17 @@ class SecondFragment : Fragment() {
 
         val min = arguments?.getInt(MIN_VALUE_KEY) ?: 0
         val max = arguments?.getInt(MAX_VALUE_KEY) ?: 0
+        generateRandom(min, max)
 
-        val random = generate(min, max)
-        result?.text = random.toString()
+        result?.text = randomNum.toString()
 
         backButton?.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.container, FirstFragment.newInstance(random)).commit()
+            MainActivity().openFirstFragment(randomNum, parentFragmentManager)
         }
     }
 
-    private fun generate(min: Int, max: Int): Int {
-        return if (min > max) (max..min).random() else (min..max).random()
+    private fun generateRandom(min: Int, max: Int) {
+        randomNum = (min..max).random()
     }
 
     companion object {
@@ -52,6 +53,9 @@ class SecondFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+
+        @JvmStatic
+        var randomNum = 0
 
         private const val MIN_VALUE_KEY = "MIN_VALUE"
         private const val MAX_VALUE_KEY = "MAX_VALUE"
