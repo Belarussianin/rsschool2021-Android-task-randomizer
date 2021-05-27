@@ -28,9 +28,10 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        previousResult?.text = "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
-        var min = 0
-        var max = 0
+        previousResult?.text =
+            "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
+        var min: Int? = null
+        var max: Int? = null
 
         view.setOnClickListener {
             hideKeyboard()
@@ -43,6 +44,7 @@ class FirstFragment : Fragment() {
                     it > Int.MAX_VALUE -> {
                         hideKeyboard()
                         snackMessage("min > Int.MAX_VALUE")
+                        min = null
                         minView.setText("")
                     }
                     else -> {
@@ -58,6 +60,7 @@ class FirstFragment : Fragment() {
                     it > Int.MAX_VALUE -> {
                         hideKeyboard()
                         snackMessage("max > Int.MAX_VALUE")
+                        max = null
                         maxView.setText("")
                     }
                     else -> {
@@ -69,11 +72,19 @@ class FirstFragment : Fragment() {
 
         generateButton?.setOnClickListener {
             hideKeyboard()
+            if (min == null) {
+                snackMessage("min empty")
+                return@setOnClickListener
+            }
+            if (max == null) {
+                snackMessage("max empty")
+                return@setOnClickListener
+            }
             when {
-                min <= -1 -> snackMessage("min empty")
-                max <= -1 -> snackMessage("max empty")
-                min > max -> snackMessage("min > max")
-                else -> mainActivity().openSecondFragment(min, max, parentFragmentManager)
+                min!! <= -1 -> snackMessage("min empty")
+                max!! <= -1 -> snackMessage("max empty")
+                min!! > max!! -> snackMessage("min > max")
+                else -> mainActivity().openSecondFragment(min!!, max!!, parentFragmentManager)
             }
         }
     }
