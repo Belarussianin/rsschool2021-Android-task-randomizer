@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
 class FirstFragment : Fragment() {
-
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
 
@@ -28,12 +27,13 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        previousResult?.text =
-            "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
-
-        val mainActivity = MainActivity()
+        previousResult?.text = "Previous result: ${arguments?.getInt(PREVIOUS_RESULT_KEY).toString()}"
         var min = 0
         var max = 0
+
+        view.setOnClickListener {
+            hideKeyboard()
+        }
 
         view.findViewById<EditText>(R.id.min_value).doAfterTextChanged {
             val minView = view.findViewById<EditText>(R.id.min_value)
@@ -72,7 +72,7 @@ class FirstFragment : Fragment() {
                 min <= 0 -> snackMessage("min empty")
                 max <= 0 -> snackMessage("max empty")
                 min > max -> snackMessage("min > max")
-                else -> mainActivity.openSecondFragment(min, max, parentFragmentManager)
+                else -> mainActivity().openSecondFragment(min, max, parentFragmentManager)
             }
         }
     }
@@ -92,6 +92,6 @@ class FirstFragment : Fragment() {
             return fragment
         }
 
-        private const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
+        const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
     }
 }

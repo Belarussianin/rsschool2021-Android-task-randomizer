@@ -8,9 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-
 class SecondFragment : Fragment() {
-
     private var backButton: Button? = null
     private var result: TextView? = null
 
@@ -34,7 +32,7 @@ class SecondFragment : Fragment() {
         result?.text = randomNum.toString()
 
         backButton?.setOnClickListener {
-            MainActivity().openFirstFragment(randomNum, parentFragmentManager)
+            mainActivity().openFirstFragment(randomNum, parentFragmentManager)
         }
     }
 
@@ -57,7 +55,7 @@ class SecondFragment : Fragment() {
         @JvmStatic
         var randomNum = 0
 
-        private const val MIN_VALUE_KEY = "MIN_VALUE"
-        private const val MAX_VALUE_KEY = "MAX_VALUE"
+        const val MIN_VALUE_KEY = "MIN_VALUE"
+        const val MAX_VALUE_KEY = "MAX_VALUE"
     }
 }
