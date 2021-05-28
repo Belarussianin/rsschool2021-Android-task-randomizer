@@ -1,21 +1,17 @@
 package com.rsschool.android2021;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface {
     private static String current_fragment;
-    private SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sPref = getPreferences(MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         openFirstFragment(0, getSupportFragmentManager());
     }
@@ -38,17 +34,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         transaction.commit();
     }
 
-/*TODO
-*    @Override
-*    public void putIntPreference(@NotNull String key, int value) {
-*        sPref.edit().putInt(key, value).apply();
-*    }
-*TODO
-*    @Override
-*    public int getIntPreference(@NotNull String key) {
-*        return sPref.getInt(key, 0);
-*    }
-*/
     @Override
     public void onBackPressed() {
         switch (current_fragment) {

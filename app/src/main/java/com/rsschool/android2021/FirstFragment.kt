@@ -28,22 +28,25 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        previousResult?.text = resources.getString(R.string.previous_result_text, arguments?.getInt(PREVIOUS_RESULT_KEY))
-
         var min: Int? = null
         var max: Int? = null
+        val minView = view.findViewById<EditText>(R.id.min_value)
+        val maxView = view.findViewById<EditText>(R.id.max_value)
+        previousResult?.text = resources.getString(
+            R.string.previous_result_text,
+            arguments?.getInt(PREVIOUS_RESULT_KEY)
+        )
 
         view.setOnClickListener {
             hideKeyboard()
         }
 
-        view.findViewById<EditText>(R.id.min_value).doAfterTextChanged {
-            val minView = view.findViewById<EditText>(R.id.min_value)
+        minView.doAfterTextChanged {
             minView.text.toString().toLongOrNull()?.let {
                 when {
                     it > Int.MAX_VALUE -> {
                         hideKeyboard()
-                        snackMessage("min > Int.MAX_VALUE")
+                        snackMessage("Min num > Int.MAX_VALUE")
                         min = null
                         minView.setText("")
                     }
@@ -53,13 +56,12 @@ class FirstFragment : Fragment() {
                 }
             }
         }
-        view.findViewById<EditText>(R.id.max_value).doAfterTextChanged {
-            val maxView = view.findViewById<EditText>(R.id.max_value)
+        maxView.doAfterTextChanged {
             maxView.text.toString().toLongOrNull()?.let {
                 when {
                     it > Int.MAX_VALUE -> {
                         hideKeyboard()
-                        snackMessage("max > Int.MAX_VALUE")
+                        snackMessage("Max num > Int.MAX_VALUE")
                         max = null
                         maxView.setText("")
                     }
@@ -72,15 +74,9 @@ class FirstFragment : Fragment() {
 
         generateButton?.setOnClickListener {
             hideKeyboard()
-            if (min == null) {
-                snackMessage("min empty")
-                return@setOnClickListener
-            }
-            if (max == null) {
-                snackMessage("max empty")
-                return@setOnClickListener
-            }
             when {
+                min.isNull() -> snackMessage("min empty")
+                max.isNull() -> snackMessage("max empty")
                 min!! <= -1 -> snackMessage("min empty")
                 max!! <= -1 -> snackMessage("max empty")
                 min!! > max!! -> snackMessage("min > max")
@@ -90,7 +86,14 @@ class FirstFragment : Fragment() {
     }
 
     private fun snackMessage(charSequence: CharSequence) = view?.let {
-        Snackbar.make(it, charSequence, Snackbar.LENGTH_SHORT).show()
+        hideKeyboard()
+        Snackbar.make(it, charSequence, Snackbar.LENGTH_SHORT).apply {
+            view.findViewById<TextView>(R.id.snackbar_text).apply {
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                textSize = 20F
+            }
+            setAction("HIDE", View.OnClickListener {} )
+        }.show()
     }
 
     companion object {
