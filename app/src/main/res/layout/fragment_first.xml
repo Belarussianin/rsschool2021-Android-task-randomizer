@@ -8,48 +8,50 @@
 
     <TextView
         android:id="@+id/previous_result"
+        app:layout_constraintVertical_chainStyle="packed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:textAlignment="center"
         android:textSize="26sp"
+        app:layout_constraintVertical_weight="2"
+        app:layout_constraintBottom_toTopOf="@+id/min_value"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Previous result: 4" />
+        tools:text="Previous result: 0" />
 
     <EditText
         android:id="@+id/min_value"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:background="@drawable/back_with_border"
-        android:hint="Min"
+        android:hint="@string/edit_text_hint_min"
+        android:autofillHints="number"
         android:inputType="number"
         android:maxLength="10"
-        android:textSize="20sp"
         android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toTopOf="@+id/max_value"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previous_result"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/previous_result" />
 
     <EditText
         android:id="@+id/max_value"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:background="@drawable/back_with_border"
-        android:hint="Max"
+        android:hint="@string/edit_text_hint_max"
+        android:autofillHints="number"
         android:inputType="number"
         android:maxLength="10"
+        android:padding="5dp"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
-        android:padding="5dp"
+        app:layout_constraintVertical_weight="1"
         app:layout_constraintBottom_toTopOf="@+id/generate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/min_value" />
 
@@ -57,8 +59,10 @@
         android:id="@+id/generate"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Generate"
+        android:text="@string/button_generate_text"
+        android:layout_marginTop="70dp"
+        app:layout_constraintVertical_weight="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/max_value" />

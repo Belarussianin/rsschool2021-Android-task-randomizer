@@ -3,4 +3,7 @@
     <string name="fragment_second_text">Result:</string>
     <string name="fragment_second_button">Back</string>
     <string name="previous_result_text">Previous result: %d</string>
+    <string name="button_generate_text">Generate</string>
+    <string name="edit_text_hint_max">Max</string>
+    <string name="edit_text_hint_min">Min</string>
 </resources>
