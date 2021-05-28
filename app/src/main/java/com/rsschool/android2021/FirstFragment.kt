@@ -42,31 +42,38 @@ class FirstFragment : Fragment() {
         }
 
         minView.doAfterTextChanged {
-            minView.text.toString().toLongOrNull()?.let {
-                when {
-                    it > Int.MAX_VALUE -> {
-                        hideKeyboard()
-                        snackMessage("Min num > Int.MAX_VALUE")
-                        min = null
-                        minView.setText("")
-                    }
-                    else -> {
-                        min = it.toInt()
+            minView.text.run {
+                if (isEmpty()) {
+                    min = null
+                } else {
+                    toString().toLongOrNull()?.let {
+                        if (it > Int.MAX_VALUE) {
+                            hideKeyboard()
+                            snackMessage("Min num > Int.MAX_VALUE")
+                            min = null
+                            minView.setText("")
+                        } else {
+                            min = it.toInt()
+                        }
                     }
                 }
             }
         }
+
         maxView.doAfterTextChanged {
-            maxView.text.toString().toLongOrNull()?.let {
-                when {
-                    it > Int.MAX_VALUE -> {
-                        hideKeyboard()
-                        snackMessage("Max num > Int.MAX_VALUE")
-                        max = null
-                        maxView.setText("")
-                    }
-                    else -> {
-                        max = it.toInt()
+            maxView.text.run {
+                if (isEmpty()) {
+                    max = null
+                } else {
+                    toString().toLongOrNull()?.let {
+                        if (it > Int.MAX_VALUE) {
+                            hideKeyboard()
+                            snackMessage("Max num > Int.MAX_VALUE")
+                            max = null
+                            maxView.setText("")
+                        } else {
+                            max = it.toInt()
+                        }
                     }
                 }
             }
@@ -92,7 +99,7 @@ class FirstFragment : Fragment() {
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 textSize = 20F
             }
-            setAction("HIDE", View.OnClickListener {} )
+            setAction("HIDE") {}
         }.show()
     }
 
