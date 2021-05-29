@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">randomizer</string>
+    <!-- Fragments second -->
     <string name="fragment_second_text">Result:</string>
     <string name="fragment_second_button">Back</string>
+    <!-- Fragments first -->
     <string name="previous_result_text">Previous result: %d</string>
     <string name="button_generate_text">Generate</string>
-    <string name="edit_text_hint_max">Max</string>
     <string name="edit_text_hint_min">Min</string>
+    <string name="edit_text_hint_max">Max</string>
+    <!-- Preference Titles -->
+    <string name="menu_settings_title">Settings</string>
+    <string name="menu_about_title">About</string>
+    <string name="menu_feedback_title">Give feedback</string>
+    <string name="menu_exit_title">Exit</string>
+    <string name="menu_clear_title">Auto clear input fields</string>
+    <string name="menu_equality_title">Min == max</string>
 </resources>

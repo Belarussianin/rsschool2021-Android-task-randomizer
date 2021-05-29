@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_settingsFragment"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="@string/menu_settings_title"
+            app:showAsAction="ifRoom">
+            <menu>
+                <group android:checkableBehavior="all">
+                    <item
+                        android:id="@+id/autoClearSettingFragment"
+                        android:orderInCategory="1"
+                        android:title="@string/menu_clear_title"
+                        app:showAsAction="always" />
+                    <item
+                        android:id="@+id/equalitySettingFragment"
+                        android:orderInCategory="2"
+                        android:title="@string/menu_equality_title"
+                        app:showAsAction="always" />
+                </group>
+            </menu>
+        </item>
+
+        <!--        <item-->
+        <!--            android:id="@+id/settingsFragment"-->
+        <!--            android:icon="@drawable/ic_baseline_settings_24"-->
+        <!--            android:orderInCategory="2"-->
+        <!--            android:title="@string/menu_settings_title" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/feedbackFragment"-->
+        <!--            android:icon="@drawable/ic_baseline_feedback_24"-->
+        <!--            android:orderInCategory="3"-->
+        <!--            android:title="@string/menu_feedback_title" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/aboutFragment"-->
+        <!--            android:icon="@drawable/ic_baseline_info_24"-->
+        <!--            android:orderInCategory="4"-->
+        <!--            android:title="@string/menu_about_title" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/menu_exit"-->
+        <!--            android:icon="@drawable/ic_baseline_exit_to_app_24"-->
+        <!--            android:orderInCategory="5"-->
+        <!--            android:title="@string/menu_exit_title" />-->
+    </group>
+</menu>

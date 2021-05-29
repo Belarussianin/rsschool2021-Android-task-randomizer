@@ -1,9 +1,8 @@
 package com.rsschool.android2021
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,6 +14,16 @@ import com.google.android.material.snackbar.Snackbar
 class FirstFragment : Fragment() {
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
+    private lateinit var numListener: OnGenerateButtonClickListener
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnGenerateButtonClickListener) {
+            numListener = context
+        } else {
+            throw ClassCastException(context.toString())
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,18 +33,35 @@ class FirstFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        var min: Int? = null
-        var max: Int? = null
         val minView = view.findViewById<EditText>(R.id.min_value)
         val maxView = view.findViewById<EditText>(R.id.max_value)
+
+        var min: Int? =
+            if (!MainActivity.autoClearOption) if (MainActivity.min == 0) null else MainActivity.min else null
+        var max: Int? =
+            if (!MainActivity.autoClearOption) if (MainActivity.max == 0) null else MainActivity.max else null
+
         previousResult?.text = resources.getString(
             R.string.previous_result_text,
             arguments?.getInt(PREVIOUS_RESULT_KEY)
+                ?: throw Exception("Null PREVIOUS value passed to the first fragment")
         )
+        min?.let {
+            minView.setText(it.toString())
+        }
+        max?.let {
+            maxView.setText(it.toString())
+        }
 
         view.setOnClickListener {
             hideKeyboard()
@@ -48,7 +74,6 @@ class FirstFragment : Fragment() {
                 } else {
                     toString().toLongOrNull()?.let {
                         if (it > Int.MAX_VALUE) {
-                            hideKeyboard()
                             snackMessage("Min num > Int.MAX_VALUE")
                             min = null
                             minView.setText("")
@@ -67,7 +92,6 @@ class FirstFragment : Fragment() {
                 } else {
                     toString().toLongOrNull()?.let {
                         if (it > Int.MAX_VALUE) {
-                            hideKeyboard()
                             snackMessage("Max num > Int.MAX_VALUE")
                             max = null
                             maxView.setText("")
@@ -80,15 +104,43 @@ class FirstFragment : Fragment() {
         }
 
         generateButton?.setOnClickListener {
-            hideKeyboard()
             when {
                 min.isNull() -> snackMessage("min empty")
                 max.isNull() -> snackMessage("max empty")
                 min!! <= -1 -> snackMessage("min empty")
                 max!! <= -1 -> snackMessage("max empty")
                 min!! > max!! -> snackMessage("min > max")
-                else -> mainActivity().openSecondFragment(min!!, max!!, parentFragmentManager)
+                MainActivity.equalityPossible == false && min == max -> snackMessage("min == max")
+                else -> {
+                    hideKeyboard()
+                    numListener.onGenerateButtonClick(min!!, max!!)
+                    mainActivity().openSecondFragment(parentFragmentManager)
+                }
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            //Restore AutoClearSetting state from static var
+            R.id.menu_settingsFragment -> {
+                item.subMenu.findItem(R.id.autoClearSettingFragment).isChecked =
+                    MainActivity.autoClearOption
+                item.subMenu.findItem(R.id.equalitySettingFragment).isChecked =
+                    MainActivity.equalityPossible
+                true
+            }
+            R.id.autoClearSettingFragment -> {
+                item.isChecked = !item.isChecked
+                MainActivity.autoClearOption = item.isChecked
+                true
+            }
+            R.id.equalitySettingFragment -> {
+                item.isChecked = !item.isChecked
+                MainActivity.equalityPossible = item.isChecked
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -111,5 +163,9 @@ class FirstFragment : Fragment() {
         }
 
         const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
+
+        interface OnGenerateButtonClickListener {
+            fun onGenerateButtonClick(min: Int, max: Int)
+        }
     }
 }
