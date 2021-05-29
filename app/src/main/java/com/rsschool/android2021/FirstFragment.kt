@@ -4,12 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 
 class FirstFragment : Fragment() {
     private var generateButton: Button? = null
@@ -43,8 +43,8 @@ class FirstFragment : Fragment() {
         setHasOptionsMenu(true)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
-        val minView = view.findViewById<EditText>(R.id.min_value)
-        val maxView = view.findViewById<EditText>(R.id.max_value)
+        val minView = view.findViewById<TextInputEditText>(R.id.min_value)
+        val maxView = view.findViewById<TextInputEditText>(R.id.max_value)
 
         var min: Int? =
             if (!MainActivity.autoClearOption) if (MainActivity.min == 0) null else MainActivity.min else null
@@ -68,7 +68,7 @@ class FirstFragment : Fragment() {
         }
 
         minView.doAfterTextChanged {
-            minView.text.run {
+            minView.text?.run {
                 if (isEmpty()) {
                     min = null
                 } else {
@@ -86,7 +86,7 @@ class FirstFragment : Fragment() {
         }
 
         maxView.doAfterTextChanged {
-            maxView.text.run {
+            maxView.text?.run {
                 if (isEmpty()) {
                     max = null
                 } else {
