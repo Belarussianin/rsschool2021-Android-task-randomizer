@@ -1,29 +1,20 @@
 package com.rsschool.android2021
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+//import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+//import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class FirstFragment : Fragment() {
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
-    private lateinit var numListener: OnGenerateButtonClickListener
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnGenerateButtonClickListener) {
-            numListener = context
-        } else {
-            throw ClassCastException(context.toString())
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +32,13 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        enableActionBar(false)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
         val minView = view.findViewById<TextInputEditText>(R.id.min_value)
         val maxView = view.findViewById<TextInputEditText>(R.id.max_value)
+        val minLayout = view.findViewById<TextInputLayout>(R.id.min_value_layout)
+        val maxLayout = view.findViewById<TextInputLayout>(R.id.max_value_layout)
 
         var min: Int? =
             if (!MainActivity.autoClearOption) if (MainActivity.min == 0) null else MainActivity.min else null
@@ -74,9 +68,9 @@ class FirstFragment : Fragment() {
                 } else {
                     toString().toLongOrNull()?.let {
                         if (it > Int.MAX_VALUE) {
-                            snackMessage("Min num > Int.MAX_VALUE")
+                            minLayout.error = getString(R.string.min_more_int_max)
                             min = null
-                            minView.setText("")
+                            minView.clearText()
                         } else {
                             min = it.toInt()
                         }
@@ -92,9 +86,9 @@ class FirstFragment : Fragment() {
                 } else {
                     toString().toLongOrNull()?.let {
                         if (it > Int.MAX_VALUE) {
-                            snackMessage("Max num > Int.MAX_VALUE")
+                            maxLayout.error = getString(R.string.max_more_int_max)
                             max = null
-                            maxView.setText("")
+                            maxView.clearText()
                         } else {
                             max = it.toInt()
                         }
@@ -104,16 +98,17 @@ class FirstFragment : Fragment() {
         }
 
         generateButton?.setOnClickListener {
+            minLayout.clearError()
             when {
-                min.isNull() -> snackMessage("min empty")
-                max.isNull() -> snackMessage("max empty")
-                min!! <= -1 -> snackMessage("min empty")
-                max!! <= -1 -> snackMessage("max empty")
-                min!! > max!! -> snackMessage("min > max")
-                MainActivity.equalityPossible == false && min == max -> snackMessage("min == max")
+                min.isNull() -> minLayout.error = getString(R.string.min_empty)
+                max.isNull() -> maxLayout.error = getString(R.string.max_empty)
+                min!! <= -1 -> minLayout.error = getString(R.string.min_empty)
+                max!! <= -1 -> maxLayout.error = getString(R.string.max_empty)
+                min!! > max!! -> maxLayout.error = getString(R.string.min_more_max)
+                MainActivity.equalityPossible == false && min == max -> minLayout.error = getString(R.string.min_equal_max)
                 else -> {
                     hideKeyboard()
-                    numListener.onGenerateButtonClick(min!!, max!!)
+                    shitSmartCast().onGenerateButtonClick(min!!, max!!)
                     mainActivity().openSecondFragment(parentFragmentManager)
                 }
             }
@@ -144,16 +139,16 @@ class FirstFragment : Fragment() {
         }
     }
 
-    private fun snackMessage(charSequence: CharSequence) = view?.let {
-        hideKeyboard()
-        Snackbar.make(it, charSequence, Snackbar.LENGTH_SHORT).apply {
-            view.findViewById<TextView>(R.id.snackbar_text).apply {
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                textSize = 20F
-            }
-            setAction("HIDE") {}
-        }.show()
-    }
+//    private fun snackMessage(@StringRes resourceID: Int) = view?.let {
+//        hideKeyboard()
+//        Snackbar.make(it, resourceID, Snackbar.LENGTH_SHORT).apply {
+//            view.findViewById<TextView>(R.id.snackbar_text).apply {
+//                textAlignment = View.TEXT_ALIGNMENT_CENTER
+//                textSize = 20F
+//            }
+//            setAction(R.string.snackbar_message) {}
+//        }.show()
+//    }
 
     companion object {
 
@@ -163,9 +158,5 @@ class FirstFragment : Fragment() {
         }
 
         const val PREVIOUS_RESULT_KEY = "PREVIOUS_RESULT"
-
-        interface OnGenerateButtonClickListener {
-            fun onGenerateButtonClick(min: Int, max: Int)
-        }
     }
 }

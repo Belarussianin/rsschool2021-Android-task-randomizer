@@ -1,6 +1,5 @@
 package com.rsschool.android2021
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,20 +9,9 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
-
 class SecondFragment : Fragment() {
     private var backButton: Button? = null
     private var result: TextView? = null
-    private lateinit var numListener: OnGenerateListener
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnGenerateListener) {
-            numListener = context
-        } else {
-            throw ClassCastException(context.toString())
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +23,7 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        enableActionBar(true)
         result = view.findViewById(R.id.result)
         backButton = view.findViewById(R.id.back)
 
@@ -51,7 +40,7 @@ class SecondFragment : Fragment() {
 
     private fun generateRandom(min: Int, max: Int): Int {
         val random = (min..max).random()
-        numListener.onGenerateRandom(random)
+        shitSmartCast().onGenerateRandom(random)
         return random
     }
 
@@ -64,9 +53,5 @@ class SecondFragment : Fragment() {
 
         const val MIN_VALUE_KEY = "MIN_VALUE"
         const val MAX_VALUE_KEY = "MAX_VALUE"
-
-        interface OnGenerateListener {
-            fun onGenerateRandom(random: Int)
-        }
     }
 }

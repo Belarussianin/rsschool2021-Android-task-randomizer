@@ -15,4 +15,14 @@
     <string name="menu_exit_title">Exit</string>
     <string name="menu_clear_title">Auto clear input fields</string>
     <string name="menu_equality_title">Min == max</string>
+    <!-- Shit -->
+    <string name="first_fragment_tag">first_fragment</string>
+    <string name="second_fragment_tag">second_fragment</string>
+    <string name="snackbar_message">HIDE</string>
+    <string name="min_empty">min empty</string>
+    <string name="max_empty">max empty</string>
+    <string name="min_more_max">min > max</string>
+    <string name="min_more_int_max">min > Int.MAX_VALUE</string>
+    <string name="max_more_int_max">max > Int.MAX_VALUE</string>
+    <string name="min_equal_max">min == max</string>
 </resources>

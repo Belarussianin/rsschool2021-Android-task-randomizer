@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import org.jetbrains.annotations.NotNull;
 
-public class MainActivity extends AppCompatActivity implements FirstFragment.Companion.OnGenerateButtonClickListener, SecondFragment.Companion.OnGenerateListener {
+public class MainActivity extends AppCompatActivity implements Shit {
     static final String MY_PREFERENCES = "preferences";
     static final String MY_PREFERENCES_AUTO_CLEAR = "autoClearOption";
     static final String MY_PREFERENCES_EQUALITY = "equalityOption";
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.Com
     }
 
     public void openFirstFragment(@NotNull FragmentManager fragmentManager) {
-        current_fragment = "first";
+        current_fragment = getResources().getString(R.string.first_fragment_tag);
         final Fragment firstFragment = FirstFragment.newInstance(previous);
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, firstFragment);
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.Com
     }
 
     public void openSecondFragment(@NotNull FragmentManager fragmentManager) {
-        current_fragment = "second";
+        current_fragment = getResources().getString(R.string.second_fragment_tag);
         final Fragment secondFragment = SecondFragment.newInstance(min, max);
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.container, secondFragment);
@@ -82,8 +82,14 @@ public class MainActivity extends AppCompatActivity implements FirstFragment.Com
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
     public void onBackPressed() {
-        if ("second".equals(current_fragment)) {
+        if (getResources().getString(R.string.second_fragment_tag).equals(current_fragment)) {
             openFirstFragment(getSupportFragmentManager());
         } else {
             super.onBackPressed();
